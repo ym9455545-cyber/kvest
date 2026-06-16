@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Квесты по информатике — уровни сложности</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(circle at 10% 20%, #0f1a2b, #03080f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #f0f6ff;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1100px;
+            background: rgba(18, 30, 48, 0.65);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 56px;
+            padding: 34px 32px 44px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: 0.25s ease;
+        }
+
+        /* Шапка */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+        }
+
+        .logo-text {
+            font-size: 2.1rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #e0edff, #a5c9ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .level-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #b8d4ff;
+        }
+
+        .level-badge i {
+            color: #fbbf24;
+        }
+
+        /* Главный заголовок */
+        .main-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #eaf2ff;
+            letter-spacing: -0.3px;
+        }
+
+        .sub-title {
+            text-align: center;
+            color: #8eb4e6;
+            font-size: 1rem;
+            margin-bottom: 36px;
+            opacity: 0.8;
+        }
+
+        /* Сетка уровней */
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .level-card {
+            background: rgba(12, 24, 40, 0.5);
+            backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 28px 18px 24px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .level-card:hover {
+            transform: translateY(-6px);
+            border-color: #3b82f666;
+            background: rgba(30, 58, 95, 0.4);
+            box-shadow: 0 16px 36px rgba(0, 30, 80, 0.4);
+        }
+
+        .level-card .level-icon {
+            font-size: 2.6rem;
+            line-height: 1;
+        }
+
+        .level-card .level-name {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #e6f0ff;
+        }
+
+        .level-card .level-desc {
+            font-size: 0.85rem;
+            color: #9ab9e6;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px 16px;
+            border-radius: 60px;
+            font-weight: 500;
+        }
+
+        .level-card .quest-count {
+            font-size: 0.8rem;
+            color: #7ca1d0;
+            margin-top: 4px;
+        }
+
+        .level-card .level-badge-small {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px 14px;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            color: #b3cef5;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* Активный уровень */
+        .level-card.active {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.12);
+            box-shadow: 0 0 0 2px #3b82f644, 0 12px 28px rgba(0, 80, 200, 0.15);
+        }
+
+        /* Кнопка сброса */
+        .reset-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .btn-reset {
+            background: rgba(180, 60, 60, 0.12);
+            border: 1px solid rgba(255, 100, 100, 0.08);
+            color: #fca5a5;
+            padding: 12px 32px;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.15s;
+            backdrop-filter: blur(4px);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-reset:hover {
+            background: rgba(200, 70, 70, 0.2);
+            border-color: #f87171aa;
+        }
+
+        /* Блок текущего квеста (появляется при выборе уровня) */
+        .quest-section {
+            margin-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 28px;
+            display: none;
+        }
+
+        .quest-section.visible {
+            display: block;
+        }
+
+        .quest-header-small {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .quest-header-small .current-level-label {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #c5ddff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quest-header-small .progress-text {
+            font-size: 0.9rem;
+            color: #8bb2e0;
+        }
+
+        .quest-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #1e3349;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .quest-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #a78bfa);
+            border-radius: 12px;
+            transition: width 0.3s ease;
+        }
+
+        /* Карточка квеста (адаптированная) */
+        .quest-card {
+            background: rgba(12, 24, 40, 0.5);
+            backdrop-filter: blur(6px);
+            border-radius: 36px;
+            padding: 28px 26px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .quest-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .quest-number {
+            background: #1d3b5c;
+            padding: 4px 18px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #b4d6ff;
+            border: 1px solid #2f5580;
+        }
+
+        .quest-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #ecf5ff;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .quest-desc {
+            font-size: 1.1rem;
+            color: #cde0fa;
+            opacity: 0.9;
+            margin-bottom: 22px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 60px;
+            padding: 14px 22px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: 0.15s ease;
+            color: #dfecff;
+            backdrop-filter: blur(2px);
+        }
+
+        .option-item:hover:not(.disabled-opt) {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: #3b82f666;
+        }
+
+        .option-item .opt-letter {
+            font-weight: 700;
+            color: #8bb9fe;
+            background: rgba(0, 40, 80, 0.25);
+            border-radius: 40px;
+            padding: 0 14px;
+            line-height: 2.2;
+            min-width: 34px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .option-item.selected {
+            background: rgba(59, 130, 246, 0.18);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px #3b82f644;
+        }
+
+        .option-item.correct {
+            background: rgba(52, 211, 153, 0.12);
+            border-color: #34d399;
+            box-shadow: 0 0 0 2px #34d39955;
+        }
+
+        .option-item.wrong {
+            background: rgba(248, 113, 113, 0.12);
+            border-color: #f87171;
+            box-shadow: 0 0 0 2px #f8717155;
+        }
+
+        .option-item.disabled-opt {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        .feedback-area {
+            margin-top: 6px;
+            padding: 16px 22px;
+            border-radius: 40px;
+            background: rgba(0, 0, 0, 0.15);
+            border-left: 4px solid #3b82f6;
+            color: #c8ddff;
+            font-weight: 500;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+        }
+
+        .feedback-area.success {
+            border-left-color: #34d399;
+            color: #b6f0d4;
+            background: rgba(52, 211, 153, 0.06);
+        }
+
+        .feedback-area.error {
+            border-left-color: #f87171;
+            color: #fccccc;
+            background: rgba(248, 113, 113, 0.06);
+        }
+
+        .nav-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background: rgba(30, 58, 95, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            color: #d6eaff;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.15s;
+            backdrop-filter: blur(4px);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6aa;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.primary {
+            background: #2563eb;
+            border-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 16px #2563eb44;
+        }
+
+        .nav-btn.primary:hover:not(:disabled) {
+            background: #3b82f6;
+        }
+
+        .nav-btn.primary-outline {
+            background: transparent;
+            border-color: #3b82f666;
+            color: #b8d4ff;
+        }
+
+        .nav-btn.primary-outline:hover:not(:disabled) {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .footer-note {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #4f74a0;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+            padding-top: 22px;
+        }
+
+        @media (max-width: 680px) {
+            .app-container { padding: 20px 16px; }
+            .logo-text { font-size: 1.6rem; }
+            .levels-grid { grid-template-columns: repeat(2, 1fr); }
+            .quest-title { font-size: 1.4rem; }
+            .option-item { padding: 12px 16px; font-size: 0.95rem; }
+            .nav-btn { padding: 10px 16px; font-size: 0.85rem; }
+            .main-title { font-size: 1.6rem; }
+        }
+
+        @media (max-width: 450px) {
+            .levels-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .level-card { padding: 18px 10px; }
+            .level-card .level-icon { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="app">
+    <!-- Шапка -->
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fas fa-microchip"></i></div>
+            <span class="logo-text">Квест<i>Инфо</i></span>
+        </div>
+        <div class="level-badge">
+            <i class="fas fa-layer-group"></i>
+            <span id="globalLevelDisplay">Выберите уровень</span>
+        </div>
+    </div>
+
+    <!-- Главная страница с уровнями -->
+    <div id="mainPage">
+        <div class="main-title">🧩 Выберите уровень сложности</div>
+        <div class="sub-title">Каждый уровень содержит 10 вопросов по информатике</div>
+
+        <div class="levels-grid" id="levelsGrid">
+            <!-- генерация через JS -->
+        </div>
+
+        <div class="reset-row">
+            <button class="btn-reset" id="resetAllBtn"><i class="fas fa-undo-alt"></i> Сбросить прогресс</button>
+        </div>
+    </div>
+
+    <!-- Блок квеста (скрыт по умолчанию) -->
+    <div class="quest-section" id="questSection">
+        <div class="quest-header-small">
+            <span class="current-level-label" id="currentLevelLabel"><i class="fas fa-flag"></i> Уровень: <span id="levelNameDisplay">—</span></span>
+            <span class="progress-text" id="questProgressText">1 / 10</span>
+        </div>
+        <div class="quest-progress-bar">
+            <div class="quest-progress-fill" id="questProgressFill" style="width: 0%;"></div>
+        </div>
+
+        <div class="quest-card">
+            <div class="quest-meta">
+                <span class="quest-number" id="questNumber">#1</span>
+            </div>
+            <div class="quest-title" id="questTitle">Загрузка...</div>
+            <div class="quest-desc" id="questDescription">Текст задания</div>
+
+            <div class="options-grid" id="optionsContainer"></div>
+
+            <div class="feedback-area" id="feedback">
+                <i class="fas fa-lightbulb"></i> Выберите вариант
+            </div>
+        </div>
+
+        <div class="nav-row">
+            <button class="nav-btn" id="prevBtn" disabled><i class="fas fa-arrow-left"></i> Назад</button>
+            <button class="nav-btn primary" id="nextBtn">Вперёд <i class="fas fa-arrow-right"></i></button>
+            <button class="nav-btn primary-outline" id="backToLevelsBtn"><i class="fas fa-list"></i> Уровни</button>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <i class="fas fa-cpu"></i> 5 уровней · по 10 квестов · от новичка до эксперта
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ---------- ДАННЫЕ УРОВНЕЙ ----------
+        const levels = [
+            {
+                id: 'novice',
+                name: 'Новичок',
+                icon: '🌱',
+                desc: 'Самые основы',
+                quests: [
+                    { title: 'Бит — это...', description: 'Что такое бит?', options: ['Единица измерения информации', 'Часть байта', 'Скорость передачи', 'Тип данных'], correct: 0 },
+                    { title: 'Байт состоит из...', description: 'Сколько бит в байте?', options: ['4', '8', '16', '32'], correct: 1 },
+                    { title: 'Двоичная система', description: 'Какое число в двоичной системе равно 5?', options: ['101', '110', '100', '111'], correct: 0 },
+                    { title: 'Логическое И', description: '1 И 0 = ?', options: ['1', '0', 'Ошибка', 'Не определено'], correct: 1 },
+                    { title: 'Алгоритм', description: 'Что такое алгоритм?', options: ['Последовательность действий', 'Программа', 'Язык', 'Команда'], correct: 0 },
+                    { title: 'Кодирование', description: 'ASCII — это...', options: ['Код символов', 'Файл', 'Папка', 'Драйвер'], correct: 0 },
+                    { title: 'Система счисления', description: 'Основание десятичной системы?', options: ['2', '8', '10', '16'], correct: 2 },
+                    { title: 'Информация', description: 'Что хранит файл?', options: ['Информацию', 'Программу', 'Данные', 'Всё выше'], correct: 3 },
+                    { title: 'Компьютер', description: 'Устройство ввода — это...', options: ['Клавиатура', 'Монитор', 'Принтер', 'Колонки'], correct: 0 },
+                    { title: 'Интернет', description: 'Что такое URL?', options: ['Адрес страницы', 'Протокол', 'Язык', 'Браузер'], correct: 0 }
+                ]
+            },
+            {
+                id: 'student',
+                name: 'Ученик',
+                icon: '📚',
+                desc: 'Базовые знания',
+                quests: [
+                    { title: 'Оперативная память', description: 'Для чего нужна ОЗУ?', options: ['Хранение данных', 'Выполнение программ', 'Долговременное хранение', 'Ввод данных'], correct: 1 },
+                    { title: 'HTTP', description: 'Что означает HTTP?', options: ['Протокол передачи', 'Язык разметки', 'Тип файла', 'Сеть'], correct: 0 },
+                    { title: 'Условие if', description: 'Какая конструкция ветвления?', options: ['if', 'for', 'while', 'switch'], correct: 0 },
+                    { title: 'Шифрование', description: 'Зачем шифруют данные?', options: ['Для защиты', 'Для сжатия', 'Для ускорения', 'Для копирования'], correct: 0 },
+                    { title: 'Нейронные сети', description: 'Где применяются нейросети?', options: ['Распознавание образов', 'Калькулятор', 'Текстовый редактор', 'Игры'], correct: 0 },
+                    { title: 'Пиксель', description: 'Что такое пиксель?', options: ['Точка экрана', 'Файл', 'Цвет', 'Разрешение'], correct: 0 },
+                    { title: 'Браузер', description: 'Что делает браузер?', options: ['Отображает страницы', 'Создаёт сайты', 'Хранит данные', 'Компилирует код'], correct: 0 },
+                    { title: 'IP-адрес', description: 'Что такое IP?', options: ['Адрес устройства', 'Имя сайта', 'Пароль', 'Протокол'], correct: 0 },
+                    { title: 'Цикл for', description: 'Для чего нужен цикл?', options: ['Повторение действий', 'Ветвление', 'Хранение данных', 'Вывод текста'], correct: 0 },
+                    { title: 'Компиляция', description: 'Что делает компилятор?', options: ['Переводит код в машинный', 'Запускает программу', 'Редактирует код', 'Удаляет ошибки'], correct: 0 }
+                ]
+            },
+            {
+                id: 'expert',
+                name: 'Знаток',
+                icon: '🧠',
+                desc: 'Углублённые знания',
+                quests: [
+                    { title: 'Стек', description: 'Какой принцип работы стека?', options: ['LIFO', 'FIFO', 'FILO', 'LILO'], correct: 0 },
+                    { title: 'ООП', description: 'Что такое полиморфизм?', options: ['Много форм', 'Наследование', 'Инкапсуляция', 'Абстракция'], correct: 0 },
+                    { title: 'SQL', description: 'Для чего нужен SQL?', options: ['Работа с БД', 'Создание сайтов', 'Рисование', 'Расчёты'], correct: 0 },
+                    { title: 'Регулярные выражения', description: 'Где применяются regex?', options: ['Поиск в тексте', 'Компиляция', 'Сжатие', 'Шифрование'], correct: 0 },
+                    { title: 'REST API', description: 'Что такое REST?', options: ['Архитектура API', 'Язык', 'Протокол', 'Сайт'], correct: 0 },
+                    { title: 'Криптография', description: 'Что такое хеш?', options: ['Уникальный отпечаток', 'Ключ', 'Шифр', 'Алгоритм'], correct: 0 },
+                    { title: 'Многопоточность', description: 'Что делает многопоточность?', options: ['Параллельное выполнение', 'Последовательное', 'Ускорение', 'Замедление'], correct: 0 },
+                    { title: 'Кэш', description: 'Для чего нужен кэш?', options: ['Ускорение доступа', 'Хранение', 'Безопасность', 'Сжатие'], correct: 0 },
+                    { title: 'Инъекции', description: 'Что такое SQL-инъекция?', options: ['Атака на БД', 'Вид программы', 'Метод шифрования', 'Тип данных'], correct: 0 },
+                    { title: 'UX/UI', description: 'Что такое UX?', options: ['Опыт пользователя', 'Интерфейс', 'Дизайн', 'Алгоритм'], correct: 0 }
+                ]
+            },
+            {
+                id: 'master',
+                name: 'Мастер',
+                icon: '⚡',
+                desc: 'Продвинутый уровень',
+                quests: [
+                    { title: 'Бинарное дерево', description: 'Что такое бинарное дерево?', options: ['Структура данных', 'Алгоритм', 'Тип файла', 'Сеть'], correct: 0 },
+                    { title: 'Алгоритм Дейкстры', description: 'Для чего нужен алгоритм Дейкстры?', options: ['Поиск кратчайшего пути', 'Сортировка', 'Шифрование', 'Сжатие'], correct: 0 },
+                    { title: 'Docker', description: 'Что делает Docker?', options: ['Контейнеризация', 'Виртуализация', 'Компиляция', 'Отладка'], correct: 0 },
+                    { title: 'Git', description: 'Для чего нужен Git?', options: ['Контроль версий', 'Создание сайтов', 'Управление БД', 'Дизайн'], correct: 0 },
+                    { title: 'Кеш-память', description: 'Уровни кэша — L1, L2, L3. Что быстрее?', options: ['L1', 'L2', 'L3', 'Одинаково'], correct: 0 },
+                    { title: 'Микросервисы', description: 'Что такое микросервисы?', options: ['Архитектура приложений', 'Тип БД', 'Язык', 'Протокол'], correct: 0 },
+                    { title: 'Блочный шифр', description: 'Что такое блочный шифр?', options: ['Шифрование блоками', 'Поточное', 'Асимметричное', 'Симметричное'], correct: 0 },
+                    { title: 'CDN', description: 'Для чего нужна CDN?', options: ['Ускорение доставки контента', 'Хранение', 'Безопасность', 'Компрессия'], correct: 0 },
+                    { title: 'JWT', description: 'Что такое JWT?', options: ['Токен авторизации', 'Язык', 'Протокол', 'Тип данных'], correct: 0 },
+                    { title: 'Блокчейн', description: 'Что лежит в основе блокчейна?', options: ['Цепочка блоков', 'База данных', 'Ключи', 'Алгоритм'], correct: 0 }
+                ]
+            },
+            {
+                id: 'expert_level',
+                name: 'Эксперт',
+                icon: '🏆',
+                desc: 'Сложнейшие вопросы',
+                quests: [
+                    { title: 'NP-полная задача', description: 'Что такое NP-полная задача?', options: ['Сложная задача', 'Простая задача', 'Быстрая задача', 'Алгоритм'], correct: 0 },
+                    { title: 'Квантовый компьютер', description: 'Что такое кубит?', options: ['Квантовый бит', 'Бит', 'Байт', 'Регистр'], correct: 0 },
+                    { title: 'Гомоморфное шифрование', description: 'Что это?', options: ['Шифрование с вычислениями', 'Обычное шифрование', 'Сжатие', 'Хеш'], correct: 0 },
+                    { title: 'ZKP (доказательство с нулевым разглашением)', description: 'Что такое ZKP?', options: ['Доказательство без раскрытия', 'Шифрование', 'Аутентификация', 'Подпись'], correct: 0 },
+                    { title: 'Функциональное программирование', description: 'Что такое монада?', options: ['Структура в FP', 'Тип данных', 'Функция', 'Класс'], correct: 0 },
+                    { title: 'Сложность алгоритмов', description: 'Что означает O(n log n)?', options: ['Сложность алгоритма', 'Время работы', 'Память', 'Количество операций'], correct: 0 },
+                    { title: 'Распределённые системы', description: 'Что такое согласованность (CAP)?', options: ['Теорема CAP', 'Тип сети', 'База данных', 'Алгоритм'], correct: 0 },
+                    { title: 'Глубокое обучение', description: 'Что такое функция потерь?', options: ['Мера ошибки', 'Активация', 'Слой', 'Оптимизатор'], correct: 0 },
+                    { title: 'Формальные грамматики', description: 'Что такое грамматика Хомского?', options: ['Иерархия языков', 'Тип алгоритма', 'Структура данных', 'Метод шифрования'], correct: 0 },
+                    { title: 'Теория игр', description: 'Что такое равновесие Нэша?', options: ['Ситуация в игре', 'Победа', 'Стратегия', 'Платеж'], correct: 0 }
+                ]
+            }
+        ];
+
+        // ---------- СОСТОЯНИЕ ----------
+        let currentLevelIndex = 0;          // индекс уровня в массиве
+        let currentQuestIndex = 0;          // индекс квеста внутри уровня
+        let selectedAnswers = {};           // { levelId: [ ответы по индексам ] }
+        let answerStatus = {};              // { levelId: [ 'correct' | 'wrong' | null ] }
+        let activeLevelId = null;           // id активного уровня
+        let isQuestMode = false;            // показываем ли квесты
+
+        // DOM
+        const mainPage = document.getElementById('mainPage');
+        const questSection = document.getElementById('questSection');
+        const levelsGrid = document.getElementById('levelsGrid');
+        const globalLevelDisplay = document.getElementById('globalLevelDisplay');
+        const levelNameDisplay = document.getElementById('levelNameDisplay');
+        const questNumber = document.getElementById('questNumber');
+        const questTitle = document.getElementById('questTitle');
+        const questDescription = document.getElementById('questDescription');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedback = document.getElementById('feedback');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const backToLevelsBtn = document.getElementById('backToLevelsBtn');
+        const resetAllBtn = document.getElementById('resetAllBtn');
+        const questProgressText = document.getElementById('questProgressText');
+        const questProgressFill = document.getElementById('questProgressFill');
+        const currentLevelLabel = document.getElementById('currentLevelLabel');
+
+        // ----- ИНИЦИАЛИЗАЦИЯ УРОВНЕЙ -----
+        function renderLevels() {
+            levelsGrid.innerHTML = '';
+            levels.forEach((level, idx) => {
+                const card = document.createElement('div');
+                card.className = 'level-card';
+                if (activeLevelId === level.id) card.classList.add('active');
+                card.dataset.index = idx;
+                card.innerHTML = `
+                    <div class="level-icon">${level.icon}</div>
+                    <div class="level-name">${level.name}</div>
+                    <div class="level-desc">${level.desc}</div>
+                    <div class="quest-count"><i class="fas fa-list-check"></i> 10 заданий</div>
+                `;
+                card.addEventListener('click', () => selectLevel(idx));
+                levelsGrid.appendChild(card);
+            });
+        }
+
+        // ----- ВЫБОР УРОВНЯ -----
+        function selectLevel(index) {
+            const level = levels[index];
+            // инициализация данных для уровня, если нет
+            if (!selectedAnswers[level.id]) {
+                selectedAnswers[level.id] = new Array(level.quests.length).fill(null);
+                answerStatus[level.id] = new Array(level.quests.length).fill(null);
+            }
+            currentLevelIndex = index;
+            currentQuestIndex = 0;
+            activeLevelId = level.id;
+            isQuestMode = true;
+
+            // обновить отображение
+            renderLevels();
+            showQuestMode();
+            renderQuest();
+        }
+
+        // ----- ПОКАЗАТЬ РЕЖИМ КВЕСТА -----
+        function showQuestMode() {
+            mainPage.style.display = 'none';
+            questSection.classList.add('visible');
+            const level = levels[currentLevelIndex];
+            globalLevelDisplay.textContent = `Уровень: ${level.name}`;
+            levelNameDisplay.textContent = level.name;
+            currentLevelLabel.innerHTML = `<i class="fas fa-flag"></i> Уровень: <span>${level.name}</span>`;
+        }
+
+        // ----- ПОКАЗАТЬ ГЛАВНУЮ -----
+        function showMainPage() {
+            isQuestMode = false;
+            mainPage.style.display = 'block';
+            questSection.classList.remove('visible');
+            globalLevelDisplay.textContent = 'Выберите уровень';
+            renderLevels();
+        }
+
+        // ----- РЕНДЕР ТЕКУЩЕГО КВЕСТА -----
+        function renderQuest() {
+            const level = levels[currentLevelIndex];
+            const quests = level.quests;
+            const q = quests[currentQuestIndex];
+            const levelId = level.id;
+            const sel = selectedAnswers[levelId];
+            const st = answerStatus[levelId];
+            const selectedIdx = sel ? sel[currentQuestIndex] : null;
+            const statusVal = st ? st[currentQuestIndex] : null;
+
+            questNumber.textContent = `#${currentQuestIndex + 1}`;
+            questTitle.textContent = q.title;
+            questDescription.textContent = q.description;
+
+            // опции
+            const letters = ['A', 'B', 'C', 'D'];
+            let html = '';
+            q.options.forEach((text, idx) => {
+                let cls = 'option-item';
+                if (selectedIdx === idx) {
+                    cls += ' selected';
+                    if (statusVal === 'correct') cls += ' correct';
+                    else if (statusVal === 'wrong') cls += ' wrong';
+                }
+                if (statusVal !== null) cls += ' disabled-opt';
+                html += `
+                    <div class="${cls}" data-optindex="${idx}">
+                        <span class="opt-letter">${letters[idx]}</span>
+                        ${text}
+                    </div>
+                `;
+            });
+            optionsContainer.innerHTML = html;
+
+            // фидбек
+            feedback.className = 'feedback-area';
+            if (statusVal === 'correct') {
+                feedback.className = 'feedback-area success';
+                feedback.innerHTML = `<i class="fas fa-check-circle"></i> Верно! Отлично.`;
+            } else if (statusVal === 'wrong') {
+                feedback.className = 'feedback-area error';
+                feedback.innerHTML = `<i class="fas fa-times-circle"></i> Неверно. Правильный ответ: ${q.options[q.correct]}`;
+            } else {
+                feedback.innerHTML = selectedIdx !== null ? `<i class="fas fa-question-circle"></i> Подтвердите ответ` : `<i class="fas fa-lightbulb"></i> Выберите вариант`;
+            }
+
+            // прогресс
+            const total = quests.length;
+            const current = currentQuestIndex + 1;
+            questProgressText.textContent = `${current} / ${total}`;
+            questProgressFill.style.width = `${(current / total) * 100}%`;
+
+            // навигация
+            prevBtn.disabled = (currentQuestIndex === 0);
+            if (currentQuestIndex === total - 1) {
+                nextBtn.innerHTML = '🏁 Финиш <i class="fas fa-flag-checkered"></i>';
+            } else {
+                nextBtn.innerHTML = 'Вперёд <i class="fas fa-arrow-right"></i>';
+            }
+
+            // обработчики
+            document.querySelectorAll('.option-item').forEach(el => {
+                el.addEventListener('click', onOptionClick);
+            });
+        }
+
+        // ----- КЛИК ПО ВАРИАНТУ -----
+        function onOptionClick(e) {
+            const el = e.currentTarget;
+            if (el.classList.contains('disabled-opt')) return;
+            const optIndex = parseInt(el.dataset.optindex, 10);
+            if (isNaN(optIndex)) return;
+
+            const level = levels[currentLevelIndex];
+            const q = level.quests[currentQuestIndex];
+            const levelId = level.id;
+
+            selectedAnswers[levelId][currentQuestIndex] = optIndex;
+            const isCorrect = (optIndex === q.correct);
+            answerStatus[levelId][currentQuestIndex] = isCorrect ? 'correct' : 'wrong';
+
+            renderQuest();
+        }
+
+        // ----- НАВИГАЦИЯ -----
+        function goToQuest(index) {
+            const level = levels[currentLevelIndex];
+            if (index < 0 || index >= level.quests.length) return;
+            currentQuestIndex = index;
+            renderQuest();
+        }
+
+        function onPrev() {
+            if (currentQuestIndex > 0) goToQuest(currentQuestIndex - 1);
+        }
+
+        function onNext() {
+            const level = levels[currentLevelIndex];
+            if (currentQuestIndex < level.quests.length - 1) {
+                goToQuest(currentQuestIndex + 1);
+            } else {
+                // финиш: проверяем все ли отвечены
+                const allAnswered = selectedAnswers[level.id].every(v => v !== null);
+                if (allAnswered) {
+                    const correctCount = answerStatus[level.id].filter(v => v === 'correct').length;
+                    feedback.className = 'feedback-area success';
+                    feedback.innerHTML = `<i class="fas fa-trophy"></i> Уровень пройден! Результат: ${correctCount}/${level.quests.length}`;
+                } else {
+                    feedback.className = 'feedback-area';
+                    feedback.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Ответьте на все вопросы!`;
+                }
+            }
+        }
+
+        // ----- СБРОС ПРОГРЕССА -----
+        function resetAllProgress() {
+            selectedAnswers = {};
+            answerStatus = {};
+            activeLevelId = null;
+            showMainPage();
+            renderLevels();
+            globalLevelDisplay.textContent = 'Выберите уровень';
+        }
+
+        // ----- НАЗАД К УРОВНЯМ -----
+        function backToLevels() {
+            showMainPage();
+        }
+
+        // ----- ИНИЦИАЛИЗАЦИЯ -----
+        function init() {
+            renderLevels();
+            showMainPage();
+
+            prevBtn.addEventListener('click', onPrev);
+            nextBtn.addEventListener('click', onNext);
+            backToLevelsBtn.addEventListener('click', backToLevels);
+            resetAllBtn.addEventListener('click', resetAllProgress);
+        }
+
+        init();
+    })();
+</script>
+</body>
+</html>
